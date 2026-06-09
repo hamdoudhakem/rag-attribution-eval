@@ -1,0 +1,12 @@
+python-dotenv
+faiss-cpu
+datasets
+transformers
+BeautifulSoup4
+wikipedia-api
+thefuzz
+lxml
+html5lib
+pandas
+rank_bm25
+mistral_inference

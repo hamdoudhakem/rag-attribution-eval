@@ -1,0 +1,11 @@
+.env
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+wiki/HG_wiki/
+.venv2
+files/corpus\ SNCF/
+data/
+wiki/

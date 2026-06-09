@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EvalLLM2026 — Annotation Attribution</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <span class="header-title">Attribution Annotation</span>
+
+    <div id="run-tabs" class="run-tabs"></div>
+
+    <div id="header-progress" class="header-progress">
+      <span id="progress-label">Chargement…</span>
+      <div class="progress-bar-wrap">
+        <div id="progress-bar" class="progress-bar-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Loading state -->
+<div id="loading" class="loading-overlay">
+  <div class="spinner"></div>
+  <p>Chargement des données…</p>
+</div>
+
+<!-- Error state -->
+<div id="error-view" class="loading-overlay hidden">
+  <p id="error-msg" style="color:#dc3545;text-align:center;max-width:500px"></p>
+</div>
+
+<!-- Main app -->
+<main id="app" class="app hidden">
+
+  <div class="session-nav">
+    <button id="btn-prev" class="btn btn-nav" disabled>← Préc.</button>
+    <span id="session-label" class="session-label"></span>
+    <button id="btn-next" class="btn btn-nav" disabled>Suiv. →</button>
+  </div>
+
+  <div class="session-wrapper">
+    <div id="session-content" class="session-content"></div>
+  </div>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

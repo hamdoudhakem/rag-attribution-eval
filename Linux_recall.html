@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aide-Mémoire Linux - Commandes Essentielles & SLURM</title>
+    <!-- Utilisation de Tailwind CSS pour un design moderne et responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .command-card {
+            transition: transform 0.2s;
+        }
+
+        .command-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Custom scrollbar for pre blocks */
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        pre::-webkit-scrollbar-track {
+            background: #1f2937;
+            rounded: 4px;
+        }
+
+        pre::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-200 antialiased min-h-screen flex flex-col md:flex-row">
+
+    <!-- Sidebar / Navigation -->
+    <aside
+        class="w-full md:w-64 bg-gray-800 p-6 border-b md:border-b-0 md:border-r border-gray-700 md:fixed md:h-screen overflow-y-auto">
+        <h1 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 9l3 3-3 3m5 0h3M4 18h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Linux Cheat Sheet
+        </h1>
+
+        <div class="mb-6">
+            <input type="text" id="searchInput" placeholder="Rechercher (ex: ls, copy...)"
+                class="w-full bg-gray-900 text-gray-100 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-500 transition-colors">
+        </div>
+
+        <nav class="space-y-2 hidden md:block">
+            <p class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Catégories</p>
+            <a href="#nav-fichiers" class="block text-gray-300 hover:text-emerald-400 py-1">📂 Navigation & Fichiers</a>
+            <a href="#lecture-texte" class="block text-gray-300 hover:text-emerald-400 py-1">📄 Lecture & Recherche</a>
+            <a href="#systeme-processus" class="block text-gray-300 hover:text-emerald-400 py-1">⚙️ Système &
+                Processus</a>
+            <a href="#droits-utilisateurs" class="block text-gray-300 hover:text-emerald-400 py-1">🔐 Droits &
+                Utilisateurs</a>
+            <a href="#reseau-divers" class="block text-gray-300 hover:text-emerald-400 py-1">🌐 Réseau & Divers</a>
+            <a href="#slurm-cluster"
+                class="block text-blue-300 hover:text-blue-400 py-1 mt-4 font-bold border-l-2 border-blue-400 pl-2">🖥️
+                Calcul & SLURM</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 md:p-10 md:ml-64 w-full max-w-5xl mx-auto">
+
+        <header class="mb-10">
+            <h2 class="text-4xl font-extrabold text-white mb-4">Commandes Terminal Essentielles</h2>
+            <p class="text-gray-400 text-lg">Maîtrise la ligne de commande. Voici les commandes les plus utiles avec
+                leurs paramètres (flags) expliqués.</p>
+        </header>
+
+        <div id="commandsContainer" class="space-y-12">
+
+            <!-- ================= CATEGORIE 1 ================= -->
+            <section id="nav-fichiers" class="scroll-mt-10">
+                <h3 class="text-2xl font-bold text-gray-100 border-b border-gray-700 pb-2 mb-6">📂 Navigation &
+                    Manipulation de Fichiers</h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <!-- Commande: pwd -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="pwd print working directory dossier actuel">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="text-xl font-mono font-bold text-emerald-400">pwd</h4>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche le chemin complet du dossier dans lequel tu te
+                            trouves actuellement (Print Working Directory).</p>
+                        <div class="bg-gray-950 rounded-md p-3 relative group">
+                            <code class="text-sm text-gray-300 font-mono">$ pwd<br>/home/hakem/projets/sncf</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: ls -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="ls list lister fichiers dossiers">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">ls</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Liste les fichiers et dossiers présents dans le répertoire
+                            courant.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ ls</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-l</code> : Format long (affiche droits, propriétaire,
+                                taille, date). <br><code class="text-gray-500 text-xs ml-4">$ ls -l</code></li>
+                            <li><code class="text-pink-400">-a</code> : Affiche les fichiers cachés (qui commencent par
+                                un point). <br><code class="text-gray-500 text-xs ml-4">$ ls -a</code></li>
+                            <li><code class="text-pink-400">-h</code> : Tailles lisibles par un humain (Ko, Mo, Go).
+                                Souvent combiné avec -l. <br><code class="text-gray-500 text-xs ml-4">$ ls -lh</code>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: cd -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="cd change directory dossier navigation">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">cd</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Change de répertoire (Change Directory).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ cd Documents/</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">..</code> : Remonte au dossier parent (précédent). <br><code
+                                    class="text-gray-500 text-xs ml-4">$ cd ..</code></li>
+                            <li><code class="text-pink-400">~</code> : Retourne direct à ton dossier personnel
+                                (/home/user). <br><code class="text-gray-500 text-xs ml-4">$ cd ~</code></li>
+                            <li><code class="text-pink-400">-</code> : Retourne au dernier dossier où tu étais.
+                                <br><code class="text-gray-500 text-xs ml-4">$ cd -</code>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: mkdir -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="mkdir make directory creer dossier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">mkdir</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Crée un ou plusieurs nouveaux dossiers.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ mkdir dataset</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-p</code> : Crée aussi les dossiers parents s'ils n'existent
+                                pas. <br><code class="text-gray-500 text-xs ml-4">$ mkdir -p data/train/images</code>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: touch -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="touch creer fichier vide">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">touch</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Crée un fichier vide (ou met à jour la date de
+                            modification d'un fichier existant).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ touch script.py</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: cp -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="cp copy copier fichier dossier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">cp</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Copie des fichiers ou des répertoires.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ cp fichier.txt copie.txt</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-r</code> : Récursif (obligatoire pour copier un dossier
+                                entier). <br><code class="text-gray-500 text-xs ml-4">$ cp -r dossier1/ dossier2/</code>
+                            </li>
+                            <li><code class="text-pink-400">-i</code> : Demande confirmation avant d'écraser un fichier
+                                existant.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: mv -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="mv move deplacer renommer fichier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">mv</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Déplace un fichier/dossier OU le renomme (s'il est déplacé
+                            au même endroit avec un autre nom).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Déplacer : <br>$ mv data.csv ./archives/ <br><br># Renommer : <br>$ mv old_name.txt new_name.txt</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: rm -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="rm remove supprimer effacer fichier dossier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">rm</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Supprime des fichiers ou dossiers. ⚠️ <b>Attention</b>, il
+                            n'y a pas de corbeille !</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ rm obsolete.txt</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-r</code> : Supprime un dossier et tout son contenu
+                                (Récursif). <br><code class="text-gray-500 text-xs ml-4">$ rm -r vieux_dossier/</code>
+                            </li>
+                            <li><code class="text-pink-400">-f</code> : Force (ne demande aucune confirmation, ignore
+                                les erreurs).</li>
+                            <li><code class="text-pink-400">-rf</code> : Le duo destructeur. À utiliser avec extrême
+                                précaution.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: find -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="find recherche chercher fichier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">find</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Recherche des fichiers et des dossiers de manière très
+                            puissante.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Cherche le fichier "train.py" depuis le dossier actuel (.)<br>$ find . -name "train.py"</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-name</code> : Cherche par nom exact (accepte les jokers *).
+                                <br><code class="text-gray-500 text-xs ml-4">$ find /home -name "*.jsonl"</code>
+                            </li>
+                            <li><code class="text-pink-400">-type</code> : d (dossier) ou f (fichier). <br><code
+                                    class="text-gray-500 text-xs ml-4">$ find . -type d -name "data"</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CATEGORIE 2 ================= -->
+            <section id="lecture-texte" class="scroll-mt-10">
+                <h3 class="text-2xl font-bold text-gray-100 border-b border-gray-700 pb-2 mb-6 mt-12">📄 Lecture &
+                    Traitement de Texte</h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                    <!-- Commande: echo -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="echo afficher ecrire texte variable">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">echo</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche du texte ou la valeur d'une variable. Souvent
+                            couplé au symbole <code>&gt;</code> pour écrire ce texte dans un fichier.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Affiche "Bonjour"<br>$ echo "Bonjour"<br><br># Écrit "Test" dans le fichier (et l'écrase)<br>$ echo "Test" > info.txt<br><br># AJOUTE "Test2" à la fin du fichier<br>$ echo "Test2" >> info.txt<br><br># Affiche une variable d'environnement<br>$ echo $PATH</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: cat -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="cat concat afficher contenu texte">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">cat</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche tout le contenu d'un fichier directement dans le
+                            terminal.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ cat requirements.txt</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: less -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="less lire fichier long page">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">less</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche le contenu d'un fichier page par page (idéal pour
+                            les très longs fichiers JSON ou logs). Appuie sur `q` pour quitter.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ less dataset_sncf.jsonl</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: head / tail -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="head tail lire debut fin fichier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">head / tail</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche respectivement les 10 premières ou 10 dernières
+                            lignes d'un fichier.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ head data.csv<br>$ tail data.csv</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-n</code> : Spécifier le nombre de lignes. <br><code
+                                    class="text-gray-500 text-xs ml-4">$ head -n 50 fichier.txt</code></li>
+                            <li><code class="text-pink-400">tail -f</code> : "Follow". Lit le fichier en continu (génial
+                                pour voir un log s'écrire en direct lors d'un entraînement de modèle !). <br><code
+                                    class="text-gray-500 text-xs ml-4">$ tail -f training_loss.log</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: grep -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="grep chercher mot texte regex">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">grep</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Recherche un mot spécifique (ou une expression régulière)
+                            à l'intérieur d'un ou plusieurs fichiers.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Cherche le mot "Epoch" dans le fichier log<br>$ grep "Epoch" results.log</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-i</code> : Ignore la casse (majuscule/minuscule).</li>
+                            <li><code class="text-pink-400">-r</code> : Cherche dans tous les fichiers d'un dossier
+                                (Récursif). <br><code
+                                    class="text-gray-500 text-xs ml-4">$ grep -r "import torch" .</code></li>
+                            <li><code class="text-pink-400">-v</code> : Inverse la recherche (affiche tout SAUF les
+                                lignes avec le mot).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: wc -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="wc word count compter lignes mots">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">wc</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Compte le nombre de lignes, mots et caractères d'un
+                            fichier (Word Count).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ wc script.py</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-l</code> : Ne compte QUE les lignes. Très utile pour savoir
+                                combien de lignes a ton dataset. <br><code
+                                    class="text-gray-500 text-xs ml-4">$ wc -l dataset.jsonl</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: nano -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="nano vim editeur texte modifier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">nano / vim</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Éditeurs de texte directement dans le terminal. Nano est
+                            très facile pour les débutants (les raccourcis comme Ctrl+X pour quitter sont écrits en
+                            bas). Vim est très puissant mais complexe (Souviens-toi : <code>Esc</code> puis
+                            <code>:q!</code> pour fuir !).
+                        </p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono">$ nano mon_script.py<br>$ vim mon_script.py</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CATEGORIE 3 ================= -->
+            <section id="systeme-processus" class="scroll-mt-10">
+                <h3 class="text-2xl font-bold text-gray-100 border-b border-gray-700 pb-2 mb-6 mt-12">⚙️ Système,
+                    Stockage & Processus</h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <!-- Commande: top / htop -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="top htop cpu ram task manager gestionnaire processus">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">top / htop</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche l'utilisation en temps réel des ressources (CPU,
+                            RAM) par les processus (comme le gestionnaire des tâches Windows). <code>htop</code> est
+                            plus coloré et lisible (souvent à installer).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ top<br>$ htop</code>
+                        </div>
+                        <p class="text-xs text-gray-500">Appuie sur 'q' pour quitter.</p>
+                    </div>
+
+                    <!-- Commande: ps -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="ps processus process status">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">ps</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Prend un instantané des processus en cours d'exécution.
+                        </p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ ps</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">aux</code> : Affiche absolument TOUS les processus tournant
+                                sur la machine, avec beaucoup de détails. <br><code
+                                    class="text-gray-500 text-xs ml-4">$ ps aux | grep python</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: kill -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="kill tuer fermer arreter pid">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">kill</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Permet de forcer l'arrêt d'un programme bloqué en
+                            utilisant son numéro d'identification (PID, que l'on trouve avec `ps` ou `top`).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ kill 1234</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-9</code> : Signal "SIGKILL". Tue le processus immédiatement
+                                et sans pitié. <br><code class="text-gray-500 text-xs ml-4">$ kill -9 1234</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: df -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="df disk free espace disque stockage">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">df</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche l'espace disque disponible et utilisé sur toutes
+                            les partitions (Disk Free).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ df -h</code>
+                        </div>
+                        <p class="text-xs text-gray-500">Le <code class="text-pink-400">-h</code> (human-readable) est
+                            indispensable pour voir des Go ou Mo plutôt que des blocs bruts.</p>
+                    </div>
+
+                    <!-- Commande: du -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="du disk usage taille dossier fichier">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">du</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Calcule la taille d'un dossier ou d'un fichier (Disk
+                            Usage). Utile pour trouver ce qui prend de la place.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ du -sh /home/hakem/dataset</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-s</code> : Sommaire (donne juste le total du dossier, sans
+                                détailler chaque sous-fichier).</li>
+                            <li><code class="text-pink-400">-h</code> : Human-readable (en Mo, Go).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: free -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="free ram memoire swap">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">free</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche la quantité de mémoire vive (RAM) et de SWAP
+                            utilisée et libre sur le système.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ free -h</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: du -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="free ram memoire swap">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">du -sh *</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche les fichiers et dossiers
+                            de ce repertoire (méme les caché) et les tris par espace de stockage pris</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ du -sh * .[!.]* | sort -h</code>
+                        </div>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-s</code> : Sommaire (donne juste le total du dossier, sans
+                                détailler chaque sous-fichier).</li>
+                            <li><code class="text-pink-400">-h</code> : Human-readable (en Mo, Go).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: df -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="free ram memoire swap">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">df</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche le quota de disk prix et combien il reste</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ df -h ./</code>
+                        </div>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-h</code> : Human-readable (en Mo, Go).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CATEGORIE 4 ================= -->
+            <section id="droits-utilisateurs" class="scroll-mt-10">
+                <h3 class="text-2xl font-bold text-gray-100 border-b border-gray-700 pb-2 mb-6 mt-12">🔐 Droits &
+                    Utilisateurs</h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <!-- Commande: sudo -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="sudo super admin root">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">sudo</h4>
+                        <p class="text-gray-400 mb-4 text-sm">"Super User DO". Permet d'exécuter une commande avec les
+                            droits d'administrateur (root). On te demandera ton mot de passe.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono">$ sudo apt update<br>$ sudo rm -rf fichier_protege/</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: chmod -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="chmod droits permissions executable">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">chmod</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Change les permissions d'un fichier (Lecture: r, Écriture:
+                            w, Exécution: x).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Rend un script Python exécutable<br>$ chmod +x train_model.py</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">+x</code> : Ajoute le droit d'exécution.</li>
+                            <li><code class="text-pink-400">755</code> : Mode numérique (Toi : Lire/Écrire/Exécuter.
+                                Autres : Lire/Exécuter). <br><code
+                                    class="text-gray-500 text-xs ml-4">$ chmod 755 script.sh</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: chown -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="chown proprietaire owner">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">chown</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Change le propriétaire (owner) d'un fichier ou dossier
+                            (nécessite souvent `sudo`).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ sudo chown hakem mon_fichier.txt</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-R</code> : Change le propriétaire de tout le dossier et ses
+                                sous-fichiers. <br><code
+                                    class="text-gray-500 text-xs ml-4">$ sudo chown -R hakem projet/</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: passwd -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="passwd password mot de passe">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">passwd</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Permet de changer ton mot de passe. Dans le terminal
+                            Linux, quand tu tapes ton mot de passe, rien ne s'affiche à l'écran (c'est normal, c'est
+                            pour la sécurité).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ passwd</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CATEGORIE 5 ================= -->
+            <section id="reseau-divers" class="scroll-mt-10">
+                <h3 class="text-2xl font-bold text-gray-100 border-b border-gray-700 pb-2 mb-6 mt-12">🌐 Réseau &
+                    Utilitaires Divers</h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    <!-- Commande: ping -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="ping internet reseau connexion">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">ping</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Envoie des paquets vers un serveur pour vérifier si tu as
+                            une connexion internet ou s'il est accessible.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ ping google.com</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Paramètres utiles :</p>
+                        <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                            <li><code class="text-pink-400">-c</code> : Nombre maximum de pings à envoyer (sinon ça ne
+                                s'arrête jamais, fais Ctrl+C pour stopper). <br><code
+                                    class="text-gray-500 text-xs ml-4">$ ping -c 4 google.com</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Commande: curl / wget -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="curl wget telecharger api url">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">wget / curl</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Deux commandes pour télécharger des fichiers depuis
+                            internet. <code>wget</code> télécharge le fichier, <code>curl</code> l'affiche dans le
+                            terminal (ou fait des requêtes API).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Télécharge directement le fichier<br>$ wget https://site.com/dataset.zip<br><br># curl affiche dans le terminal, on utilise -O pour sauvegarder<br>$ curl -O https://site.com/dataset.zip</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: tar -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="tar zip unzip archiver compresser extraire">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">tar</h4>
+                        <p class="text-gray-400 mb-4 text-sm">L'outil de base pour créer ou extraire des archives (les
+                            fameux fichiers .tar.gz).</p>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2 mt-4">Extraire (dézipper) :</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ tar -xzvf archive.tar.gz</code>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Compresser un dossier :</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ tar -czvf nom_archive.tar.gz dossier/</code>
+                        </div>
+                        <p class="text-xs text-gray-500">Moyen mnémotechnique : <b>-x</b> pour eXtract (extraire),
+                            <b>-c</b> pour Create (créer).
+                        </p>
+                    </div>
+
+                    <!-- Commande: man -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="man manuel aide help doc">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">man</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche le manuel complet d'une commande. C'est ta
+                            meilleure bouée de sauvetage ! (Appuie sur 'q' pour quitter).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ man ls<br>$ man find</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: history -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg"
+                        data-search="history historique rejouer fleche">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">history</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche la liste de toutes les dernières commandes que tu
+                            as tapées dans le terminal.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono">$ history<br><br># Astuce : Cherche une ancienne commande <br>$ history | grep "python"</code>
+                        </div>
+                    </div>
+
+                    <!-- L'astuce finale: Le Pipe | -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-emerald-700 shadow-lg col-span-1 xl:col-span-2"
+                        data-search="pipe symbole barre combiner">
+                        <h4 class="text-xl font-mono font-bold text-emerald-400 mb-2">L'astuce en or : Le Pipe ( | )
+                        </h4>
+                        <p class="text-gray-400 mb-4 text-sm">Le symbole "pipe" <code>|</code> permet de brancher la
+                            sortie d'une commande dans l'entrée d'une autre. C'est le super-pouvoir de Linux.</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3 border border-emerald-900">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Liste les fichiers (ls) ET filtre seulement ceux contenant "csv" (grep)<br>$ ls -l | grep ".csv"<br><br># Compte (wc) le nombre de processus python en cours (ps)<br>$ ps aux | grep "python" | wc -l</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= CATEGORIE 6 : SLURM ================= -->
+            <section id="slurm-cluster" class="scroll-mt-10">
+                <h3
+                    class="text-2xl font-bold text-blue-300 border-b border-blue-900 pb-2 mb-6 mt-12 flex items-center gap-2">
+                    🖥️ Calcul Haute Performance & SLURM
+                </h3>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+                    <!-- Explication du principe SLURM -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-blue-800 shadow-lg col-span-1 xl:col-span-2"
+                        data-search="slurm principe explication script sh sbatch">
+                        <h4 class="text-xl font-mono font-bold text-blue-400 mb-2">Comprendre un script SLURM (.sh)</h4>
+                        <p class="text-gray-300 mb-4 text-sm leading-relaxed">
+                            Sur un cluster, tu ne lances pas ton code Python directement. Tu crées un "script de
+                            soumission" (souvent nommé <code>job.sh</code>). Ce script contient des commentaires
+                            spéciaux qui commencent par <code>#SBATCH</code>. SLURM lit ces commentaires pour savoir de
+                            quelles ressources tu as besoin (GPU, RAM, temps), te place dans une file d'attente, et
+                            exécute tes commandes quand les ressources sont libres.
+                        </p>
+                        <div class="bg-gray-950 rounded-md p-4 mb-3 border border-blue-900/50 overflow-x-auto">
+                            <pre class="text-sm text-gray-300 font-mono leading-snug"><code>#!/bin/bash
+<span class="text-gray-500"># --- 1. CONFIGURATION DES RESSOURCES (Lues par SLURM) ---</span>
+<span class="text-blue-400">#SBATCH --job-name=bert_train</span>       <span class="text-gray-500"># Nom de ton job (pour le retrouver)</span>
+<span class="text-blue-400">#SBATCH --output=logs/job_%j.out</span>    <span class="text-gray-500"># Où écrire les print() du code (%j = ID du job)</span>
+<span class="text-blue-400">#SBATCH --error=logs/job_%j.err</span>     <span class="text-gray-500"># Où écrire les messages d'erreur</span>
+<span class="text-blue-400">#SBATCH --partition=gpu</span>             <span class="text-gray-500"># File d'attente à utiliser (ex: gpu, cpu)</span>
+<span class="text-blue-400">#SBATCH --gres=gpu:1</span>                <span class="text-gray-500"># Je veux 1 carte graphique (GPU)</span>
+<span class="text-blue-400">#SBATCH --time=12:00:00</span>             <span class="text-gray-500"># Temps max alloué (12 heures, après il coupe)</span>
+<span class="text-blue-400">#SBATCH --mem=32G</span>                   <span class="text-gray-500"># Quantité de RAM système demandée</span>
+
+<span class="text-gray-500"># --- 2. COMMANDES À EXÉCUTER ---</span>
+echo "Lancement du job sur le noeud: $HOSTNAME"
+
+<span class="text-gray-500"># Charger l'environnement ou les modules si nécessaire</span>
+module load python/3.10
+source venv/bin/activate
+
+<span class="text-gray-500"># Lancer le vrai code</span>
+python train_model.py</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Commande: sbatch -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-blue-800 shadow-lg"
+                        data-search="sbatch soumettre lancer job script">
+                        <h4 class="text-xl font-mono font-bold text-blue-400 mb-2">sbatch</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Soumet ton script `.sh` au gestionnaire SLURM. Il te
+                            retournera un numéro d'identification (le Job ID).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono">$ sbatch job.sh<br><span class="text-gray-500">Submitted batch job 543210</span></code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: squeue -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-blue-800 shadow-lg"
+                        data-search="squeue file attente etat status job">
+                        <h4 class="text-xl font-mono font-bold text-blue-400 mb-2">squeue</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche la file d'attente des jobs sur le cluster. Tu peux
+                            voir si ton code est en train de tourner (Status: `R` pour Running) ou s'il attend (Status:
+                            `PD` pour Pending).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Voir UNIQUEMENT tes propres jobs<br>$ squeue -u $USER</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: scancel -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-blue-800 shadow-lg"
+                        data-search="scancel annuler tuer stopper job">
+                        <h4 class="text-xl font-mono font-bold text-blue-400 mb-2">scancel</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Annule ou tue immédiatement un job que tu as soumis
+                            (utilise le Job ID donné par sbatch ou squeue).</p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code
+                                class="text-sm text-gray-300 font-mono"># Annuler un job spécifique<br>$ scancel 543210<br><br># Annuler TOUS tes jobs d'un coup (Attention !)<br>$ scancel -u $USER</code>
+                        </div>
+                    </div>
+
+                    <!-- Commande: sinfo -->
+                    <div class="command-card bg-gray-800 rounded-xl p-6 border border-blue-800 shadow-lg"
+                        data-search="sinfo cluster noeud etat ressources dispo">
+                        <h4 class="text-xl font-mono font-bold text-blue-400 mb-2">sinfo</h4>
+                        <p class="text-gray-400 mb-4 text-sm">Affiche l'état global du cluster et des partitions. Permet
+                            de voir quels nœuds de calcul sont `idle` (libres), `alloc` (occupés) ou `down` (en panne).
+                        </p>
+                        <div class="bg-gray-950 rounded-md p-3 mb-3">
+                            <code class="text-sm text-gray-300 font-mono">$ sinfo</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-sm pb-10">
+                Aide-mémoire conçu pour t'aider dans ton stage M1 - Mémorise que l'échappatoire à Vim c'est
+                <code>:q!</code> 😉 et SLURM ton ami pour le ML !
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- Script de recherche -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.command-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            cards.forEach(card => {
+                const searchData = card.getAttribute('data-search').toLowerCase();
+                const commandName = card.querySelector('h4').innerText.toLowerCase();
+
+                if (searchData.includes(searchTerm) || commandName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

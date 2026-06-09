@@ -1,0 +1,11 @@
+# Private organizer file (contains full page texts — never distributed)
+data/task2_v3_organizer.jsonl
+
+# Generated from organizer data — recreate with: python prepare_data.py
+data/annotation_data.json
+
+# Generated ground-truth outputs — recreate with: python export_ground_truth.py
+output/
+
+# Temp file from atomic writes
+data/annotations.tmp
