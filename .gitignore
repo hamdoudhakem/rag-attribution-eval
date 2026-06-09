@@ -4,8 +4,8 @@ __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-wiki/HG_wiki/
 .venv2
 files/corpus\ SNCF/
-data/
-wiki/
+data/v*/
+data/*.jsonl
+wiki/HF_wiki/train
